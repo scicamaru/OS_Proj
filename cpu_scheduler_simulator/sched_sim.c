@@ -18,7 +18,9 @@ typedef struct {
   int num_cpu;
 } SchedSJFArgs;
 
-void schedRR(FakeOS* os, void* args_){
+
+//non viene più usata 
+void schedRR(FakeOSRR* os, void* args_){
   SchedRRArgs* args=(SchedRRArgs*)args_;
 
   // look for the first process in ready
@@ -26,8 +28,9 @@ void schedRR(FakeOS* os, void* args_){
   if (! os->ready.first)
     return;
 
+ 
   FakePCB* pcb=(FakePCB*) List_popFront(&os->ready);
-  os->running=pcb;
+  os->running = pcb; //sostituisce il processo in esecuzione con il primo della lista ready
   
   assert(pcb->events.first);
   ProcessEvent* e = (ProcessEvent*)pcb->events.first;
@@ -59,9 +62,14 @@ void schedSJF(FakeOS* os, void* args_){
 
 
 
-  FakePCB* pcb=(FakePCB*) List_popFront(&os->ready); //rimuove il primo elemento della lista ready
-  os->running=pcb; //il processo pcb è in esecuzione
-  
+  //FakePCB* pcb=(FakePCB*) List_popFront(&os->ready); //rimuove il primo elemento della lista ready
+  //os->running=pcb; //il processo pcb è in esecuzione
+  //os->running.first = pcb; //sostituisce il processo in esecuzione con il primo della lista ready
+ 
+  //prova
+  os->running.first=List_popFront(&os->ready);
+  FakePCB* pcb=(FakePCB*)os->running.first;
+
   assert(pcb->events.first);
   ProcessEvent* e = (ProcessEvent*)pcb->events.first;
   assert(e->type==CPU);
@@ -88,7 +96,7 @@ int main(int argc, char** argv) {
   os.schedule_args=&srr_args;
   os.schedule_fn=schedRR; //puntatore a funzione di scheduling  - schedRR
   */
- 
+
   SchedSJFArgs ssjf_args;
   ssjf_args.quantum=5; //quanto RR
   os.schedule_args=&ssjf_args;
@@ -106,10 +114,10 @@ int main(int argc, char** argv) {
     }
   }
   printf("num processes in queue %d\n", os.processes.size);
-  while(os.running
+  while(os.running.first 
         || os.ready.first
         || os.waiting.first
-        || os.processes.first){
+        || os.processes.first){ //sostituito running con running.first
     FakeOS_simStep(&os);
   }
 }
