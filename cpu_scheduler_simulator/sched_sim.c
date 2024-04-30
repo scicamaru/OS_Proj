@@ -16,6 +16,7 @@ typedef struct { //parametro round Robin
 typedef struct { 
   int quantum;
   int num_cpu;
+  float a; //parametro per quantum prediction
 } SchedSJFArgs;
 
 
