@@ -72,8 +72,6 @@ void FakeOS_createProcess(FakeOS* os, FakeProcess* p) {
   }
 }
 
-
-
 void FakeOS_simStep(FakeOS* os){
   
   printf("************** TIME: %08d **************\n", os->timer);
@@ -154,6 +152,7 @@ void FakeOS_simStep(FakeOS* os){
       printf("\t\tend burst\n");
       List_popFront(&running->events);
       free(e);
+      List_detach(&os->running,(ListItem*) running);
       if (! running->events.first) {
         printf("\t\tend process\n");
         free(running); // kill process
@@ -172,7 +171,10 @@ void FakeOS_simStep(FakeOS* os){
       }
       //os->running = 0;
       //NON SO COME CORREGGERLO AL MOMENTO HELP
-      os->running.first= NULL; //prova solo per eliminare errori compilazione
+      //tolto perché funziona
+      //os->running.first= NULL; //prova solo per eliminare errori compilazione
+      //non si ferma aiuto (30/04/2024)
+
     }
   }
 
