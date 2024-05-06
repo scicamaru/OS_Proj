@@ -139,20 +139,25 @@ void FakeOS_simStep(FakeOS* os){
   // and reschedule process
   // if last event, destroy running
   
-  FakePCB* running = (FakePCB*)os->running.first; //running è il primo elemento della lista running  
+  aux = os->running.first; //running è il primo elemento della lista running  
   
-  printf("\trunning pid: %d\n", running?running->pid:-1);
+  if(!aux) printf("\t no running process\n");
 
-  if (running) {
+//sostituisco l'if con un while perché running è una lista
+  while (aux) {
+    FakePCB* running=(FakePCB*)aux;
     ProcessEvent* e=(ProcessEvent*) running->events.first;
-    assert(e->type==CPU);
+    assert(e->type==CPU); //controllo che l'evento sia di tipo CPU 
     e->duration--;
+
     printf("\t\tremaining time:%d\n",e->duration);
+
     if (e->duration==0){
       printf("\t\tend burst\n");
       List_popFront(&running->events);
       free(e);
       List_detach(&os->running,(ListItem*) running);
+
       if (! running->events.first) {
         printf("\t\tend process\n");
         free(running); // kill process
@@ -176,7 +181,15 @@ void FakeOS_simStep(FakeOS* os){
       //non si ferma aiuto (30/04/2024)
 
     }
+    /*  NO PERCHÉ DA SEGMENTATION FAULT
+    //qui vedo se esiste il pcb successivo e lo assegno a running 
+    aux = os->running.first; //running è il prossimo elemento della lista running
+    aux = aux->next;
+    running = (FakePCB*)aux;*/
+
+    aux=aux->next;
   }
+
 
   // call schedule, if defined
   if (os->schedule_fn &&  !os->running.first){  //sostituito os->running con os->running.first
