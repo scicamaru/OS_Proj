@@ -1,5 +1,6 @@
 #include "linked_list.h"
 #include <assert.h>
+#include <stdlib.h>
 
 void List_init(ListHead* head) {
   head->first=0;
@@ -90,3 +91,6 @@ ListItem* List_popFront(ListHead* head) {
   return List_detach(head, head->first);
 }
 
+bool list_isEmpty(ListHead* head) {
+  return head->first == NULL;
+}
