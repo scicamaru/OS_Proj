@@ -146,6 +146,7 @@ void FakeOS_simStep(FakeOS* os){
 //sostituisco l'if con un while perché running è una lista
   while (aux) {
     FakePCB* running=(FakePCB*)aux;
+    aux=aux->next; //spostato all'inizio no segmentation fault
     ProcessEvent* e=(ProcessEvent*) running->events.first;
     assert(e->type==CPU); //controllo che l'evento sia di tipo CPU 
     e->duration--;
@@ -187,7 +188,7 @@ void FakeOS_simStep(FakeOS* os){
     aux = aux->next;
     running = (FakePCB*)aux;*/
 
-    aux=aux->next;
+    
   }
 
 
