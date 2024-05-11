@@ -12,6 +12,16 @@ typedef struct { //parametro round Robin
 } SchedRRArgs;
 
 
+int dimRunningList(FakeOS* os){  //dimensione della lista running
+  int dim=0;
+  FakePCB* pcb=(FakePCB*)os->running.first;
+  while(pcb){
+    ++dim;
+    pcb=(FakePCB*)pcb->list.next;
+  }
+  return dim;
+}
+
 //nuova struct per più CPU e per SJF
 typedef struct { 
   int quantum;
@@ -70,6 +80,12 @@ void schedSJF(FakeOS* os, void* args_){
   //os->running=pcb; //il processo pcb è in esecuzione
   //os->running.first = pcb; //sostituisce il processo in esecuzione con il primo della lista ready
  
+
+
+
+
+
+
   //prova
   os->running.first=List_popFront(&os->ready);
   FakePCB* pcb=(FakePCB*)os->running.first;
