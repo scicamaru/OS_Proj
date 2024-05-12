@@ -137,9 +137,11 @@ int main(int argc, char** argv) {
 
   SchedSJFArgs ssjf_args;
   ssjf_args.quantum=5; //quanto RR
+  ssjf_args.a=0.8; //parametro per quantum prediction  (30/04/2024)
+  ssjf_args.num_cpu=3; //numero di CPU
   os.schedule_args=&ssjf_args;
   os.schedule_fn=schedSJF; //puntatore a funzione di scheduling  - schedSJF
-  //ssjf_args.a=0.8; //parametro per quantum prediction  (30/04/2024) 
+   
   //deve essere < 1
   for (int i=1; i<argc; ++i){
     FakeProcess new_process;
