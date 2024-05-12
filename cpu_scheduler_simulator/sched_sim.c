@@ -22,6 +22,29 @@ int dimRunningList(FakeOS* os){  //dimensione della lista running
   return dim;
 }
 
+ListItem* minProcess(FakeOS* os){ //trova il processo con la durata minore
+  
+  ListItem* minProc;
+  int min_duration=-1; //inizializzo la durata minima a -1;
+
+  if (!os->ready.first) //se la lista ready è vuota
+    return NULL; //ritorna NULL
+
+  ListItem* item=os->ready.first; //considero il primo elemento della lista ready 
+  
+  while(item){
+    FakePCB* pcb=(FakePCB*)item; //conversione
+    ProcessEvent* e=(ProcessEvent*)pcb->events.first; //prendo il primo evento del processo
+    if (e->duration<min_duration || min_duration==-1){ //se la durata del processo è minore
+    //della durata minima o la durata minima è -1 
+      min_duration=e->duration; //la durata minima diventa la durata del processo
+      minProc=item; //il processo minimo è l'elemento della lista ready
+    }
+    item=item->next; //passo all'elemento successivo
+  }
+  return minProc; //ritorno il processo minimo
+}
+
 //nuova struct per più CPU e per SJF
 typedef struct { 
   int quantum;
@@ -80,7 +103,12 @@ void schedSJF(FakeOS* os, void* args_){
   //os->running=pcb; //il processo pcb è in esecuzione
   //os->running.first = pcb; //sostituisce il processo in esecuzione con il primo della lista ready
  
-
+  //ciclo sulla lista dei ready
+  while(os->ready.first){   
+    ListItem* minProc=minProcess(os); //trova il processo con la durata minore
+    List_remove(&os->ready, minProc); //rimuove il processo dalla lista ready
+    List_pushBack(&os->ready, minProc); //inserisce il processo in coda
+  }
 
 
 
