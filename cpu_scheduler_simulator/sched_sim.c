@@ -105,15 +105,29 @@ void schedSJF(FakeOS* os, void* args_){
  
   //ciclo sulla lista dei ready
   while(os->ready.first){   
-    ListItem* minProc=minProcess(os); //trova il processo con la durata minore
-    List_remove(&os->ready, minProc); //rimuove il processo dalla lista ready
-    List_pushBack(&os->ready, minProc); //inserisce il processo in coda
+    //ListItem* minProc=minProcess(os); //trova il processo con la durata minore
+    ListItem* item= List_detach(&os->ready, minProcess(os)); //rimuove il processo dalla lista ready
+    List_pushFront(&os->running, item); //inserisce il processo in esecuzione come primo elemento
+    FakePCB* pcb=(FakePCB*)item; //conversione
+    os->running.first=(ListItem*)pcb; //il processo pcb è in esecuzione + conversione
+    assert(pcb->events.first); //controllo
+    ProcessEvent* e = (ProcessEvent*)pcb->events.first; //prendo il primo evento del processo
+    assert(e->type==CPU); //controllo
+
+    
+    if (e->duration>args->quantum) { //spostato controllo quantum nel while
+      ProcessEvent* qe=(ProcessEvent*)malloc(sizeof(ProcessEvent));
+      qe->list.prev=qe->list.next=0;
+      qe->type=CPU;
+      qe->duration=args->quantum;
+      e->duration-=args->quantum;
+      List_pushFront(&pcb->events, (ListItem*)qe);
+    }
+    
   }
 
 
-
-
-
+  /*
   //prova
   os->running.first=List_popFront(&os->ready);
   FakePCB* pcb=(FakePCB*)os->running.first;
@@ -121,23 +135,11 @@ void schedSJF(FakeOS* os, void* args_){
   assert(pcb->events.first);
   ProcessEvent* e = (ProcessEvent*)pcb->events.first;
   assert(e->type==CPU);
-
-  
-
+  */
   // look at the first event
   // if duration>quantum
   // push front in the list of event a CPU event of duration quantum
   // alter the duration of the old event subtracting quantum
-  
-  if (e->duration>args->quantum) {
-    ProcessEvent* qe=(ProcessEvent*)malloc(sizeof(ProcessEvent));
-    qe->list.prev=qe->list.next=0;
-    qe->type=CPU;
-    qe->duration=args->quantum;
-    e->duration-=args->quantum;
-    List_pushFront(&pcb->events, (ListItem*)qe);
-  }
-  
   /*****************************************/
   //QUI QUANTUM PREDITTIVO
   //non so se è corretto spero di sì altrimenti mi sparo
