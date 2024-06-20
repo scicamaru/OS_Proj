@@ -107,6 +107,7 @@ void FakeOS_simStep(FakeOS* os){
     printf("\t\tremaining time:%d\n",e->duration);
 
     if (e->duration==0){
+      printf("\t\tpid: %d\n",pcb->pid);
       printf("\t\tend burst\n");
       List_popFront(&pcb->events);
       free(e);
@@ -118,6 +119,7 @@ void FakeOS_simStep(FakeOS* os){
       } else {
         //handle next event
         e=(ProcessEvent*) pcb->events.first;
+        printf("\t\tpid: %d\n",pcb->pid);
         switch (e->type){
         case CPU:
           printf("\t\tmove to ready\n");
@@ -150,7 +152,7 @@ void FakeOS_simStep(FakeOS* os){
     ProcessEvent* e=(ProcessEvent*) running->events.first;
     assert(e->type==CPU); //controllo che l'evento sia di tipo CPU 
     e->duration--;
-
+    printf("\t\tpid: %d\n",running->pid);
     printf("\t\tremaining time:%d\n",e->duration);
 
     if (e->duration==0){
