@@ -144,8 +144,9 @@ void FakeOS_simStep(FakeOS* os){
   aux = os->running.first; //running è il primo elemento della lista running  
   
   if(!aux) printf("\t no running process\n");
-
+//////////////////////////////////////////////////////////
 //sostituisco l'if con un while perché running è una lista
+//////////////////////////////////////////////////////////
   while (aux) {
     FakePCB* running=(FakePCB*)aux;
     aux=aux->next; //spostato all'inizio no segmentation fault
