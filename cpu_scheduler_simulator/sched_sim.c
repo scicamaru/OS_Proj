@@ -104,7 +104,7 @@ void schedSJF(FakeOS* os, void* args_){
   //os->running.first = pcb; //sostituisce il processo in esecuzione con il primo della lista ready
  
   //ciclo sulla lista dei ready
-  while(os->ready.first){   
+  while(os->ready.first && dimRunningList(os)<args->num_cpu){   
     //ListItem* minProc=minProcess(os); //trova il processo con la durata minore
     ListItem* item= List_detach(&os->ready, minProcess(os)); //rimuove il processo dalla lista ready
     List_pushFront(&os->running, item); //inserisce il processo in esecuzione come primo elemento
@@ -115,12 +115,12 @@ void schedSJF(FakeOS* os, void* args_){
     assert(e->type==CPU); //controllo
 
     if (e->duration>args->quantum) { //spostato controllo quantum nel while
-      ProcessEvent* qe=(ProcessEvent*)malloc(sizeof(ProcessEvent));
-      qe->list.prev=qe->list.next=0;
-      qe->type=CPU;
-      qe->duration=args->quantum;
-      e->duration-=args->quantum;
-      List_pushFront(&pcb->events, (ListItem*)qe);
+      ProcessEvent* qe=(ProcessEvent*)malloc(sizeof(ProcessEvent)); //nuovo evento
+      qe->list.prev=qe->list.next=0; //inizializzazione
+      qe->type=CPU; //tipo CPU
+      qe->duration=args->quantum; //durata quantum
+      e->duration-=args->quantum; //sottrazione della durata del processo
+      List_pushFront(&pcb->events, (ListItem*)qe); //inserimento dell'evento nella lista del processo
     }
     
   }
