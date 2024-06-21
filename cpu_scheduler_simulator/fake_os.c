@@ -178,20 +178,9 @@ void FakeOS_simStep(FakeOS* os){
           break;
         }
       }
-      //os->running = 0;
-      //NON SO COME CORREGGERLO AL MOMENTO HELP
-      //tolto perché funziona
-      //os->running.first= NULL; //prova solo per eliminare errori compilazione
-      //non si ferma aiuto (30/04/2024)
-
+  
     }
-    /*  NO PERCHÉ DA SEGMENTATION FAULT
-    //qui vedo se esiste il pcb successivo e lo assegno a running 
-    aux = os->running.first; //running è il prossimo elemento della lista running
-    aux = aux->next;
-    running = (FakePCB*)aux;*/
-
-    
+  
   }
 
 
