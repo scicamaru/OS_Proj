@@ -61,3 +61,7 @@
       //tolto perché funziona
       //os->running.first= NULL; //prova solo per eliminare errori compilazione
       //non si ferma aiuto (30/04/2024)
+
+
+  //assert tolto perché non funziona per più CPU
+  //assert( (!os->running || os->running->pid!=p->pid) && "pid taken");

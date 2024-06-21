@@ -20,10 +20,6 @@ void FakeOS_createProcess(FakeOS* os, FakeProcess* p) {
   // we check that in the list of PCBs there is no
   // pcb having the same pid
 
- 
-  //assert tolto perché non funziona per più CPU
-  //assert( (!os->running || os->running->pid!=p->pid) && "pid taken");
-
   /**************************************************/
   //controllo unicità pid 
   /**************************************************/
