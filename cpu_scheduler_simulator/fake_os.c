@@ -157,7 +157,7 @@ void FakeOS_simStep(FakeOS* os){
     running->durataQ++; // aumento durata del prcesso nel quanto
     printf("\t\tpid: %d\n",running->pid);
     printf("\t\tremaining time:%d\n",e->duration);
-    printf("\t\ttime consumed:%d\n",running->durataQ);
+    printf("\t\ttime consumed:%f\n",running->durataQ);
 
     if (e->duration==0){
       printf("\t\tend burst\n");
@@ -165,7 +165,7 @@ void FakeOS_simStep(FakeOS* os){
       free(e);
       List_detach(&os->running,(ListItem*) running);
       running->durataQ=0; //reset durata processo
-      
+
       if (! running->events.first) {
         printf("\t\tend process\n");
         free(running); // kill process
