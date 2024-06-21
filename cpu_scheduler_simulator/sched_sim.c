@@ -143,7 +143,7 @@ int main(int argc, char** argv) {
   os.schedule_fn=schedSJF; //puntatore a funzione di scheduling  - schedSJF
    
   //deve essere < 1
-  for (int i=1; i<argc; ++i){
+  for (int i=2; i<argc; ++i){
     FakeProcess new_process;
     int num_events=FakeProcess_load(&new_process, argv[i]);
     printf("loading [%s], pid: %d, events:%d\n",
