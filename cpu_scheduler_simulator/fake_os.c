@@ -53,6 +53,7 @@ void FakeOS_createProcess(FakeOS* os, FakeProcess* p) {
   new_pcb->list.next=new_pcb->list.prev=0;
   new_pcb->pid=p->pid;
   new_pcb->events=p->events;
+  new_pcb->durataQ=0; //durata processo a zero pronto per iniziare a contare
 
   assert(new_pcb->events.first && "process without events");
 
@@ -153,15 +154,18 @@ void FakeOS_simStep(FakeOS* os){
     ProcessEvent* e=(ProcessEvent*) running->events.first;
     assert(e->type==CPU); //controllo che l'evento sia di tipo CPU 
     e->duration--;
+    running->durataQ++; // aumento durata del prcesso nel quanto
     printf("\t\tpid: %d\n",running->pid);
     printf("\t\tremaining time:%d\n",e->duration);
+    printf("\t\ttime consumed:%d\n",running->durataQ);
 
     if (e->duration==0){
       printf("\t\tend burst\n");
       List_popFront(&running->events);
       free(e);
       List_detach(&os->running,(ListItem*) running);
-
+      running->durataQ=0; //reset durata processo
+      
       if (! running->events.first) {
         printf("\t\tend process\n");
         free(running); // kill process
