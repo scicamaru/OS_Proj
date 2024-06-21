@@ -31,7 +31,7 @@ ListItem* minProcess(FakeOS* os){ //trova il processo con la durata minore
     return NULL; //ritorna NULL
 
   ListItem* item=os->ready.first; //considero il primo elemento della lista ready 
-  
+  //devo controllare il processo minimo anche in base al quantum
   while(item){
     FakePCB* pcb=(FakePCB*)item; //conversione
     ProcessEvent* e=(ProcessEvent*)pcb->events.first; //prendo il primo evento del processo
@@ -113,6 +113,8 @@ void schedSJF(FakeOS* os, void* args_){
     assert(pcb->events.first); //controllo
     ProcessEvent* e = (ProcessEvent*)pcb->events.first; //prendo il primo evento del processo
     assert(e->type==CPU); //controllo
+
+  //quantum predittivo qui
 
     if (e->duration>args->quantum) { //spostato controllo quantum nel while
       ProcessEvent* qe=(ProcessEvent*)malloc(sizeof(ProcessEvent)); //nuovo evento
