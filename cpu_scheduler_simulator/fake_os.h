@@ -8,6 +8,7 @@ typedef struct {
   ListItem list;
   int pid;
   ListHead events;
+  float quantumdur;
 } FakePCB;
 
 struct FakeOS;
