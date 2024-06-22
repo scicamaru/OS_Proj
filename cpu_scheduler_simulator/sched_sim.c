@@ -11,7 +11,7 @@ typedef struct { //parametro round Robin
   int quantum;
 } SchedRRArgs;
 
-
+//non viene usato
 int dimRunningList(FakeOS* os){  //dimensione della lista running
   int dim=0;
   FakePCB* pcb=(FakePCB*)os->running.first;
