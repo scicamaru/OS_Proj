@@ -32,6 +32,10 @@ ListItem* minProcess(FakeOS* os){ //trova il processo con la durata minore
 
   ListItem* item=os->ready.first; //considero il primo elemento della lista ready 
   //devo controllare il processo minimo anche in base al quantum
+
+  /* QUESTO CODICE MI FA CONTROLLARE LA DURATA MINIMA DEL PROCESSO IN BASE 
+  ALLA DURATA ATTUALE E NON AL PROSSIMO EVENTO
+  -> SJF così non funziona
   while(item){
     FakePCB* pcb=(FakePCB*)item; //conversione
     ProcessEvent* e=(ProcessEvent*)pcb->events.first; //prendo il primo evento del processo
@@ -41,7 +45,18 @@ ListItem* minProcess(FakeOS* os){ //trova il processo con la durata minore
       minProc=item; //il processo minimo è l'elemento della lista ready
     }
     item=item->next; //passo all'elemento successivo
+  }*/
+
+ while(item){
+  FakePCB* pcb=(FakePCB*)item; //conversione
+  ProcessEvent* e=(ProcessEvent*)pcb->events.first; //prendo il primo evento del processo
+  if(e->durata_post >=0 && (e->durata_post < min_duration || min_duration==-1)){ //se la durata del processo è minore
+    //della durata minima o la durata minima è -1 
+    min_duration=e->durata_post; //la durata minima diventa la durata del processo
+    minProc=item; //il processo minimo è l'elemento della lista ready
   }
+  item=item->next; //passo all'elemento successivo
+ }
   return minProc; //ritorno il processo minimo
 }
 
