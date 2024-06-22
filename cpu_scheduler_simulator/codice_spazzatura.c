@@ -65,3 +65,15 @@
 
   //assert tolto perché non funziona per più CPU
   //assert( (!os->running || os->running->pid!=p->pid) && "pid taken");
+
+  //trovo il processo più corto e lo metto all'inizio
+  //prendo la lista ready da fakeok
+  //trovo il minimo dela lista ready con list item (conversione)
+  //lo metto in coda
+  //il sistema prende automaticamente il primo della coda
+
+
+  //FakePCB* pcb=(FakePCB*) List_popFront(&os->ready); //rimuove il primo elemento della lista ready
+  //os->running=pcb; //il processo pcb è in esecuzione
+  //os->running.first = pcb; //sostituisce il processo in esecuzione con il primo della lista ready
+ 

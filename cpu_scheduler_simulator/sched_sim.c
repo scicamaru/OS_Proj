@@ -107,29 +107,23 @@ void schedSJF(FakeOS* os, void* args_){
   if (! os->ready.first) 
     return;
 
-  //trovo il processo più corto e lo metto all'inizio
-  //prendo la lista ready da fakeok
-  //trovo il minimo dela lista ready con list item (conversione)
-  //lo metto in coda
-  //il sistema prende automaticamente il primo della coda
-
-
-  //FakePCB* pcb=(FakePCB*) List_popFront(&os->ready); //rimuove il primo elemento della lista ready
-  //os->running=pcb; //il processo pcb è in esecuzione
-  //os->running.first = pcb; //sostituisce il processo in esecuzione con il primo della lista ready
- 
   //ciclo sulla lista dei ready
   while(os->ready.first &&  os->running.size <args->num_cpu){   /* sostituito dimRunningList(os)*/ 
     //ListItem* minProc=minProcess(os); //trova il processo con la durata minore
     ListItem* item= List_detach(&os->ready, minProcess(os)); //rimuove il processo dalla lista ready
     List_pushFront(&os->running, item); //inserisce il processo in esecuzione come primo elemento
+    
     FakePCB* pcb=(FakePCB*)item; //conversione
     os->running.first=(ListItem*)pcb; //il processo pcb è in esecuzione + conversione
+    
     assert(pcb->events.first); //controllo
+    
     ProcessEvent* e = (ProcessEvent*)pcb->events.first; //prendo il primo evento del processo
     assert(e->type==CPU); //controllo
 
-  //quantum predittivo qui
+    //quantum predittivo qui
+    if(e->duration!=0) //se la durata del processo è diversa da 0
+      e->durata_post = (args->a)*(pcb->durataQ) + (1-args->a)*e->durata_pre; //calcolo la durata post
 
     if (e->duration>args->quantum) { //spostato controllo quantum nel while
       ProcessEvent* qe=(ProcessEvent*)malloc(sizeof(ProcessEvent)); //nuovo evento
