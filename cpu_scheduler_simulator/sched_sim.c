@@ -49,10 +49,10 @@ ListItem* minProcess(FakeOS* os){ //trova il processo con la durata minore
 
  while(item){
   FakePCB* pcb=(FakePCB*)item; //conversione
-  ProcessEvent* e=(ProcessEvent*)pcb->events.first; //prendo il primo evento del processo
-  if(e->durata_post >=0 && (e->durata_post < min_duration || min_duration==-1)){ //se la durata del processo è minore
+  //ProcessEvent* e=(ProcessEvent*)pcb->events.first; //prendo il primo evento del processo
+  if(pcb->durataCPU_post >=0 && (pcb->durataCPU_post < min_duration || min_duration==-1)){ //se la durata del processo è minore
     //della durata minima o la durata minima è -1 
-    min_duration=e->durata_post; //la durata minima diventa la durata del processo
+    min_duration=pcb->durataCPU_post; //la durata minima diventa la durata del processo
     minProc=item; //il processo minimo è l'elemento della lista ready
   }
   item=item->next; //passo all'elemento successivo
@@ -122,9 +122,9 @@ void schedSJF(FakeOS* os, void* args_){
     assert(e->type==CPU); //controllo
 
     //quantum predittivo qui
-    if(e->duration!=0) //se la durata del processo è diversa da 0
-      e->durata_post = (args->a)*(pcb->durataQ) + (1-args->a)*e->durata_pre; //calcolo la durata post
-
+    if(e->duration!=0){ //se la durata del processo è diversa da 0
+      pcb->durataCPU_post = (args->a)*(pcb->durataQ) + (1-args->a)*pcb->durataCPU_pre; //calcolo la durata post
+    }
     if (e->duration>args->quantum) { //spostato controllo quantum nel while
       ProcessEvent* qe=(ProcessEvent*)malloc(sizeof(ProcessEvent)); //nuovo evento
       qe->list.prev=qe->list.next=0; //inizializzazione
