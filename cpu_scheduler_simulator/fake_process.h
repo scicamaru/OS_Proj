@@ -8,8 +8,6 @@ typedef struct {
   ListItem list;
   ResourceType type;
   int duration;
-//l'evento deve misurare la durata di prima e dopo
-//credo(?) - scicamaru 21/06/2024
   float durata_pre;
   float durata_post;
 } ProcessEvent;
