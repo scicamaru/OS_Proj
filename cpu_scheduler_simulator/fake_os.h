@@ -9,6 +9,9 @@ typedef struct {
   int pid;
   ListHead events;
   float durataQ; //durata del processo
+
+  float durataCPU_pre; //durata del processo in CPU
+  float durataCPU_post; //durata del processo in CPU
 } FakePCB;
 
 struct FakeOS;
